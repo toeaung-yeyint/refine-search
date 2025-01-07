@@ -1,22 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="searchbar.css" />
-    <script src="searchbar.js" defer type="module"></script>
-    <title>Auto Complete Search Bar</title>
-  </head>
-  <body>
-    <form action="" autocomplete="off">
-      <label for="search-input">Search Cat:</label>
-      <input type="text" id="search-input" placeholder="enter a cat breed" />
-      <select name="country" id="country">
-        <option value="" selected>All</option>
-      </select>
-    </form>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="searchbar.css" />
+		<script src="searchbar.js" defer type="module"></script>
+		<title>Auto Complete Search Bar</title>
+	</head>
+	<body>
+		<form action="" autocomplete="off">
+			<label for="search-input">Search Cat:</label>
+			<input type="text" id="search-input" placeholder="enter a cat breed" />
+			<select name="country" id="country">
+				<option value="" selected>All</option>
+			</select>
+			<button class="sort-cat-breeds">Sort by cat breeds</button>
+			<button class="sort-countries">Sort by countries</button>
+			<button class="asc">ASC</button>
+			<button class="desc">DESC</button>
+		</form>
 
-    <h1>Cats</h1>
-    <div class="result"></div>
-  </body>
+		<h1>Cats</h1>
+		<div class="result"></div>
+	</body>
 </html>
