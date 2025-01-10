@@ -4,23 +4,33 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="stylesheet" href="searchbar.css" />
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+		/>
 		<script src="searchbar.js" defer type="module"></script>
-		<title>Auto Complete Search Bar</title>
+		<title>Search Bar</title>
 	</head>
 	<body>
-		<form action="" autocomplete="off">
-			<label for="search-input">Search Cat:</label>
-			<input type="text" id="search-input" placeholder="enter a cat breed" />
-			<select name="country" id="country">
-				<option value="" selected>All</option>
+		<form autocomplete="off">
+			<div class="search-container">
+				<input
+					type="search"
+					id="search-input"
+					placeholder="Enter cat breed..."
+				/>
+				<i class="fa fa-search"></i>
+			</div>
+			<select name="country-selection" id="country-selection">
+				<option value="" selected>Select an origin: All</option>
 			</select>
-			<button class="sort-cat-breeds">Sort by cat breeds</button>
-			<button class="sort-countries">Sort by countries</button>
-			<button class="asc">ASC</button>
+			<select name="sort-by" id="sort-by">
+				<option value="breeds" selected>Sort by cat breeds</option>
+				<option value="origins">Sort by origins</option>
+			</select>
+			<button class="asc active">ASC</button>
 			<button class="desc">DESC</button>
 		</form>
-
-		<h1>Cats</h1>
 		<div class="result"></div>
 	</body>
 </html>

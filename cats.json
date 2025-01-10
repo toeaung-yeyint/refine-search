@@ -1,0 +1,57 @@
+[
+	{
+		"breed": "Abyssinian",
+		"origin": "Ethiopia",
+		"image": "abyssinian.jpg"
+	},
+	{
+		"breed": "American Shorthair",
+		"origin": "United States",
+		"image": "american-shorthair.jpg"
+	},
+	{
+		"breed": "British Shorthair",
+		"origin": "United Kingdom",
+		"image": "british-shorthair.jpg"
+	},
+	{
+		"breed": "Burmese",
+		"origin": "Myanmar (Burma)",
+		"image": "burmese-cat.jpg"
+	},
+	{
+		"breed": "Chartreux",
+		"origin": "France",
+		"image": "chartreux.jpg"
+	},
+	{
+		"breed": "Cornish Rex",
+		"origin": "United Kingdom",
+		"image": "cornish-rex.jpg"
+	},
+	{
+		"breed": "Egyptian Mau",
+		"origin": "Egypt",
+		"image": "egyptian-mau.jpg"
+	},
+	{
+		"breed": "Exotic Shorthair",
+		"origin": "United States",
+		"image": "exotic-shorthair.jpg"
+	},
+	{
+		"breed": "Japanese Bobtail",
+		"origin": "Japan",
+		"image": "japanese-bobtail.jpg"
+	},
+	{
+		"breed": "Norwegian Forest Cat",
+		"origin": "Norway",
+		"image": "norwegian-forest-cat.jpg"
+	},
+	{
+		"breed": "Ragdoll",
+		"origin": "United States",
+		"image": "ragdoll.jpg"
+	}
+]

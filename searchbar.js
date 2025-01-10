@@ -1,81 +1,84 @@
-import { faker } from "https://esm.sh/@faker-js/faker";
-
 const searchForm = document.querySelector("form");
-
 searchForm.addEventListener("submit", (e) => e.preventDefault());
 
-const generateRandomCat = () => {
-	return {
-		name: faker.animal.cat(),
-		country: faker.location.country(),
-	};
-};
-
-let randomCats = Array(20).fill(0).map(generateRandomCat);
-
-randomCats.sort((a, b) => {
-	return a.name.localeCompare(b.name);
-});
-
 const result = document.querySelector(".result");
+const originSelection = document.querySelector("#country-selection");
 
-const countrySelection = document.querySelector("#country");
+fetch("cats.json")
+	.then((response) => response.json())
+	.then((cats) => {
+		const uniqueOrigins = [...new Set(cats.map((cat) => cat.origin))];
+		uniqueOrigins.sort((a, b) => {
+			return a.localeCompare(b);
+		});
+		uniqueOrigins.forEach((origin) => {
+			const option = document.createElement("option");
+			option.textContent = origin;
+			option.value = origin.toLowerCase();
+			originSelection.appendChild(option);
+		});
 
-const cats = randomCats.map((cat) => {
-	const para = document.createElement("p");
-	para.textContent = `${cat.name} | Country of origin: ${cat.country}`;
-	para.classList.add("cat");
-	para.dataset.breed = cat.name.toLowerCase();
-	para.dataset.country = cat.country.toLowerCase();
-	result.appendChild(para);
-
-	const option = document.createElement("option");
-	option.value = cat.country.toLowerCase();
-	option.textContent = cat.country;
-	countrySelection.appendChild(option);
-
-	return { name: cat.name, country: cat.country, element: para };
-});
+		cats.forEach((cat) => {
+			const card = document.createElement("div");
+			card.dataset.breed = cat.breed.toLowerCase();
+			card.dataset.origin = cat.origin.toLowerCase();
+			card.classList.add("card");
+			const catImage = document.createElement("img");
+			catImage.classList.add("cat-image");
+			catImage.alt = cat.breed;
+			catImage.src = cat.image;
+			const name = document.createElement("p");
+			name.classList.add("cat-breed");
+			name.textContent = cat.breed;
+			const origin = document.createElement("p");
+			origin.classList.add("cat-origin");
+			origin.textContent = `Origin: ${cat.origin}`;
+			result.appendChild(card);
+			card.appendChild(catImage);
+			card.appendChild(name);
+			card.appendChild(origin);
+		});
+	});
 
 const searchInput = document.querySelector("#search-input");
-
 searchInput.addEventListener("input", (e) => {
+	const catElements = document.querySelectorAll(".card");
 	const searchTerm = e.target.value.toLowerCase();
-	cats.forEach((cat) => {
-		const isVisible = cat.name.toLowerCase().includes(searchTerm);
-		cat.element.classList.toggle("hidden", !isVisible);
+	catElements.forEach((catElement) => {
+		const isVisible = catElement
+			.querySelector(".cat-breed")
+			.textContent.toLowerCase()
+			.includes(searchTerm);
+		catElement.classList.toggle("hidden", !isVisible);
 	});
 });
 
-countrySelection.addEventListener("change", (e) => {
+originSelection.addEventListener("change", (e) => {
+	const catElements = document.querySelectorAll(".card");
 	const selection = e.target.value;
-	cats.forEach((cat) => {
-		const isVisible = cat.country.toLowerCase().includes(selection);
-		cat.element.classList.toggle("hidden", !isVisible);
+	catElements.forEach((catElement) => {
+		const isVisible = catElement
+			.querySelector(".cat-origin")
+			.textContent.toLowerCase()
+			.includes(selection);
+		catElement.classList.toggle("hidden", !isVisible);
 	});
 });
 
-let sortedBy = "Cat Breeds";
+let sortBy = "breeds";
+const sortSelection = document.querySelector("#sort-by");
+const ascBtn = document.querySelector(".asc");
+const descBtn = document.querySelector(".desc");
 
-const sortByCatBreeds = document.querySelector(".sort-cat-breeds");
-const sortByCountries = document.querySelector(".sort-countries");
-const asc = document.querySelector(".asc");
-const desc = document.querySelector(".desc");
-
-sortByCatBreeds.addEventListener("click", () => {
-	sortedBy = "Cat Breeds";
-	console.log(sortedBy);
+sortSelection.addEventListener("change", (e) => {
+	sortBy = e.target.value;
 });
 
-sortByCountries.addEventListener("click", () => {
-	sortedBy = "Countries";
-	console.log(sortedBy);
-});
-
-let catElements = Array.from(document.querySelectorAll(".cat"));
-
-asc.addEventListener("click", () => {
-	if (sortedBy === "Cat Breeds") {
+ascBtn.addEventListener("click", (e) => {
+	const catElements = Array.from(document.querySelectorAll(".card"));
+	descBtn.classList.remove("active");
+	e.currentTarget.classList.add("active");
+	if (sortBy === "breeds") {
 		catElements.sort((a, b) => {
 			return a.dataset.breed.localeCompare(b.dataset.breed);
 		});
@@ -84,9 +87,9 @@ asc.addEventListener("click", () => {
 			result.appendChild(catElement);
 		});
 	}
-	if (sortedBy === "Countries") {
+	if (sortBy === "origins") {
 		catElements.sort((a, b) => {
-			return a.dataset.country.localeCompare(b.dataset.country);
+			return a.dataset.origin.localeCompare(b.dataset.origin);
 		});
 		result.textContent = "";
 		catElements.forEach((catElement) => {
@@ -95,8 +98,11 @@ asc.addEventListener("click", () => {
 	}
 });
 
-desc.addEventListener("click", () => {
-	if (sortedBy === "Cat Breeds") {
+descBtn.addEventListener("click", (e) => {
+	const catElements = Array.from(document.querySelectorAll(".card"));
+	ascBtn.classList.remove("active");
+	e.currentTarget.classList.add("active");
+	if (sortBy === "breeds") {
 		catElements.sort((a, b) => {
 			return b.dataset.breed.localeCompare(a.dataset.breed);
 		});
@@ -105,9 +111,9 @@ desc.addEventListener("click", () => {
 			result.appendChild(catElement);
 		});
 	}
-	if (sortedBy === "Countries") {
+	if (sortBy === "origins") {
 		catElements.sort((a, b) => {
-			return b.dataset.country.localeCompare(a.dataset.country);
+			return b.dataset.origin.localeCompare(a.dataset.origin);
 		});
 		result.textContent = "";
 		catElements.forEach((catElement) => {
