@@ -8,6 +8,12 @@ const ascBtn = document.querySelector(".asc");
 const descBtn = document.querySelector(".desc");
 const result = document.querySelector(".result");
 
+/**
+ * Fetches cat data from the provided URL.
+ * @param {string} url - The URL to fetch cat data from.
+ * @returns {Promise<Object[]>} A promise that resolves to an array of cat objects.
+ * @throws {Error} Throws an error if the HTTP response is not ok.
+ */
 const fetchCats = async (url) => {
 	const response = await fetch(url);
 	if (!response.ok) {
@@ -17,6 +23,10 @@ const fetchCats = async (url) => {
 	return cats;
 };
 
+/**
+ * Populates a selection element with unique cat origins.
+ * @param {Array} cats - An array of cat objects.
+ */
 const populateUniqueOrigins = (cats) => {
 	const uniqueOrigins = [...new Set(cats.map((cat) => cat.origin))];
 	uniqueOrigins.sort((a, b) => {
@@ -30,7 +40,11 @@ const populateUniqueOrigins = (cats) => {
 	});
 };
 
-const renderCatCards = async (cats) => {
+/**
+ * Renders cat cards on the page.
+ * @param {Array} cats - An array of cat objects.
+ */
+const renderCatCards = (cats) => {
 	try {
 		cats.forEach((cat) => {
 			const card = document.createElement("div");
@@ -55,6 +69,10 @@ const renderCatCards = async (cats) => {
 	}
 };
 
+/**
+ * Handles the search input event to filter and display cat elements based on the search term.
+ * @param {Event} e - The input event triggered by the search bar.
+ */
 const handleSearchInput = (e) => {
 	const catElements = document.querySelectorAll(".card");
 	const searchTerm = e.target.value.toLowerCase();
@@ -66,6 +84,11 @@ const handleSearchInput = (e) => {
 	});
 };
 
+/**
+ * Handles the selection of an origin from a dropdown element
+ * by Filtering and toggling the visibility of elements based on the selected origin.
+ * @param {Event} e - The event object from the origin selection input.
+ */
 const handleOriginSelection = (e) => {
 	const catElements = document.querySelectorAll(".card");
 	const selection = e.target.value;
@@ -77,7 +100,14 @@ const handleOriginSelection = (e) => {
 	});
 };
 
-const sortElements = (catElements) => {
+/**
+ * Sorts the cat cards based on the specified order and criteria.
+ * The function retrieves all elements with the class "card", sorts them
+ * based on the data attribute specified by `sortBy` and the order specified
+ * by `orderBy`, and then appends the sorted elements back to the result container.
+ */
+const sortCatCards = () => {
+	const catElements = Array.from(document.querySelectorAll(".card"));
 	catElements.sort((a, b) => {
 		return orderBy === "asc"
 			? a.dataset[sortBy].localeCompare(b.dataset[sortBy])
@@ -85,11 +115,6 @@ const sortElements = (catElements) => {
 	});
 	result.textContent = "";
 	catElements.forEach((catElement) => result.appendChild(catElement));
-};
-
-const sortCatCards = () => {
-	const catElements = Array.from(document.querySelectorAll(".card"));
-	sortElements(catElements);
 };
 
 const cats = await fetchCats("cats.json");
