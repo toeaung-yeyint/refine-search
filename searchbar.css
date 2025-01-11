@@ -18,13 +18,20 @@ form {
 	gap: 10px;
 }
 input,
-select {
+select,
+button {
 	border: 1px solid #ccc;
 	border-radius: 5px;
 	font-size: 16px;
-}
-select {
 	padding: 5px;
+}
+button {
+	background-color: unset;
+	cursor: pointer;
+}
+.active {
+	background-color: green;
+	color: white;
 }
 .search-container {
 	position: relative;
@@ -42,17 +49,6 @@ select {
 	font-size: 18px;
 	color: #888;
 }
-.asc,
-.desc {
-	border: 1px solid #ccc;
-	background-color: unset;
-	border-radius: 5px;
-	cursor: pointer;
-}
-.active {
-	background-color: green;
-	color: white;
-}
 .result {
 	margin-top: 50px;
 	display: grid;
@@ -67,8 +63,8 @@ select {
 	display: block;
 	width: 100%;
 	height: 200px;
-	background-color: gray;
 	object-fit: cover;
+	background-color: gray;
 }
 .card p {
 	margin: 10px 0;
