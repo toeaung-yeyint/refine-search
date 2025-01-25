@@ -1,30 +1,35 @@
 const searchForm = document.querySelector("form");
 const searchInput = document.querySelector("#search-input");
-const originSelection = document.querySelector("#country-selection");
+const originSelectionElement = document.querySelector("#country-selection");
 let sortBy = "breed";
 let orderBy = "asc";
-const sortSelection = document.querySelector("#sort-by");
+const sortSelectionElement = document.querySelector("#sort-by");
 const ascBtn = document.querySelector(".asc");
 const descBtn = document.querySelector(".desc");
 const result = document.querySelector(".result");
 
 /**
- * Fetches cat data from the provided URL.
+ * To Fetch cat data from the provided URL.
  * @param {string} url - The URL to fetch cat data from.
  * @returns {Promise<Object[]>} A promise that resolves to an array of cat objects.
  * @throws {Error} Throws an error if the HTTP response is not ok.
  */
 const fetchCats = async (url) => {
-	const response = await fetch(url);
-	if (!response.ok) {
-		throw new Error(`HTTP error! status: ${response.status}`);
+	try {
+		const response = await fetch(url);
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		const cats = await response.json();
+		return cats;
+	} catch (error) {
+		result.textContent = "An error occurred while fetching the data.";
+		console.log(error);
 	}
-	const cats = await response.json();
-	return cats;
 };
 
 /**
- * Populates a selection element with unique cat origins.
+ * To populate a selection element with unique cat origins.
  * @param {Array} cats - An array of cat objects.
  */
 const populateUniqueOrigins = (cats) => {
@@ -36,16 +41,16 @@ const populateUniqueOrigins = (cats) => {
 		const option = document.createElement("option");
 		option.textContent = origin;
 		option.value = origin.toLowerCase();
-		originSelection.appendChild(option);
+		originSelectionElement.appendChild(option);
 	});
 };
 
 /**
- * Renders cat cards on the page.
+ * To create cat cards and add them to the result section on the page.
  * @param {Array} cats - An array of cat objects.
  */
 const renderCatCards = (cats) => {
-	try {
+	if (cats.length > 0) {
 		cats.forEach((cat) => {
 			const card = document.createElement("div");
 			card.dataset.breed = cat.breed.toLowerCase();
@@ -64,47 +69,39 @@ const renderCatCards = (cats) => {
 			card.appendChild(name);
 			card.appendChild(origin);
 		});
-	} catch (error) {
-		result.textContent = error;
+	} else {
+		result.textContent = "No cats found. Please try again later.";
 	}
 };
 
 /**
- * Handles the search input event to filter and display cat elements based on the search term.
- * @param {Event} e - The input event triggered by the search bar.
+ * To handle search input from the search bar.
+ * @param {Event} e - The event object triggered by input in the search bar.
  */
 const handleSearchInput = (e) => {
-	const catElements = document.querySelectorAll(".card");
+	const catCards = document.querySelectorAll(".card");
 	const searchTerm = e.target.value.toLowerCase();
-	catElements.forEach((catElement) => {
-		const isVisible = catElement.dataset.breed
-			.toLowerCase()
-			.includes(searchTerm);
-		catElement.classList.toggle("hidden", !isVisible);
+	catCards.forEach((catCard) => {
+		const isVisible = catCard.dataset.breed.toLowerCase().includes(searchTerm);
+		catCard.classList.toggle("hidden", !isVisible);
 	});
 };
 
 /**
- * Handles the selection of an origin from a dropdown element
- * by Filtering and toggling the visibility of elements based on the selected origin.
- * @param {Event} e - The event object from the origin selection input.
+ * To handle the selection of an origin from a selection element.
+ * @param {Event} e - The event object triggered by input in the origin selection.
  */
 const handleOriginSelection = (e) => {
-	const catElements = document.querySelectorAll(".card");
+	const catCards = document.querySelectorAll(".card");
 	const selection = e.target.value;
-	catElements.forEach((catElement) => {
-		const isVisible = catElement.dataset.origin
-			.toLowerCase()
-			.includes(selection);
-		catElement.classList.toggle("hidden", !isVisible);
+	catCards.forEach((catCard) => {
+		const isVisible = catCard.dataset.origin.toLowerCase().includes(selection);
+		catCard.classList.toggle("hidden", !isVisible);
 	});
 };
 
 /**
- * Sorts the cat cards based on the specified order and criteria.
- * The function retrieves all elements with the class "card", sorts them
- * based on the data attribute specified by `sortBy` and the order specified
- * by `orderBy`, and then appends the sorted elements back to the result container.
+ * To sort the cat cards based on the specified order and criteria.
  */
 const sortCatCards = () => {
 	const catElements = Array.from(document.querySelectorAll(".card"));
@@ -122,8 +119,10 @@ populateUniqueOrigins(cats);
 renderCatCards(cats);
 searchForm.addEventListener("submit", (e) => e.preventDefault());
 searchInput.addEventListener("input", (e) => handleSearchInput(e));
-originSelection.addEventListener("change", (e) => handleOriginSelection(e));
-sortSelection.addEventListener("change", (e) => {
+originSelectionElement.addEventListener("change", (e) =>
+	handleOriginSelection(e)
+);
+sortSelectionElement.addEventListener("change", (e) => {
 	sortBy = e.target.value;
 	sortCatCards();
 });
